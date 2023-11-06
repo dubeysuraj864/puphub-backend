@@ -3,6 +3,7 @@ const express = require("express");
 const morgan = require("morgan");
 require("./db/config")
 const users = require("./db/users")
+const products = require("./db/products")
 // Bring in environmental variables
 const dotenv = require("dotenv");
 const cors = require("cors");
@@ -43,5 +44,14 @@ app.post("/login", async (req, res)=> {
   }
 })
 
+app.get("/products", async (req, res)=> {
+  const product = await products.find();
+  if(product.length > 0){
+    res.send(product)
+  }
+  else{
+    res.send({result : "No record found."})
+  }
+})
 
 app.listen(PORT, () => console.log(`Listening on PORT ${PORT}`));
