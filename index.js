@@ -35,7 +35,7 @@ app.post("/admin-sign-up", async (req, res) => {
   let admin = await new admins(req.body);
   let result = await admin.save();
   res.send(result);
-})
+});
 
 app.post("/login", async (req, res) => {
   console.log(req.body);
@@ -49,13 +49,11 @@ app.post("/login", async (req, res) => {
   }
 });
 
-
-
 app.post("/admin-login", async (req, res) => {
   console.log(req.body);
   if (req.body.email && req.body.password) {
     let admin = await admins.findOne(req.body).select("-password");
-    
+
     if (admin) {
       res.send({ admin });
     } else {
@@ -63,7 +61,13 @@ app.post("/admin-login", async (req, res) => {
     }
   }
 });
-  
+
+app.post("/add-products", async (req, res) => {
+  let product = await products(req.body);
+  let result = await product.save();
+  res.send(result);
+});
+
 app.get("/products", async (req, res) => {
   const product = await products.find();
   if (product.length > 0) {
@@ -72,5 +76,10 @@ app.get("/products", async (req, res) => {
     res.send({ result: "No record found." });
   }
 });
+
+app.delete("/products/:id", async (req, res) => {
+  let product = await products.deleteOne({_id: req.params.id})
+  res.send(product);
+})
 
 app.listen(PORT, () => console.log(`Listening on PORT ${PORT}`));
