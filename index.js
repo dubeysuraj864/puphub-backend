@@ -9,12 +9,14 @@ dotenv.config();
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
 
-mongoose.connect(process.env.DATABASE);
 // Bring in environmental variables
 
 const cors = require("cors");
 
 const BASE_URL = process.env.BASE_URI;
+const DATABASE = process.env.DATABASE;
+
+mongoose.connect(process.env.DATABASE);
 const app = express();
 
 const PORT = process.env.PORT || 6000;
