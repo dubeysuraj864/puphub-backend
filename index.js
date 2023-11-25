@@ -8,11 +8,11 @@ const admins = require("./db/admin");
 // Bring in environmental variables
 const dotenv = require("dotenv");
 const cors = require("cors");
-dotenv.config();
+dotenv.config(); 
 
 const app = express();
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 6000;  
 
 // ALL YOUR MIDDLEWARE AND ROUTES GO HERE
 app.use(cors());
@@ -65,7 +65,7 @@ app.post("/admin-login", async (req, res) => {
 app.post("/add-products", async (req, res) => {
   let product = await products(req.body);
   let result = await product.save();
-  res.send(result);
+  res.send({ result });
 });
 
 app.get("/products", async (req, res) => {
@@ -77,9 +77,26 @@ app.get("/products", async (req, res) => {
   }
 });
 
+app.get("/products/:id", async (req, res) => {
+  const product = await products.findOne({_id: req.params.id});
+  if (product) {
+    res.send(product);
+  } else {
+    res.send({ result: "No record found." });
+  }
+});
+
 app.delete("/products/:id", async (req, res) => {
-  let product = await products.deleteOne({_id: req.params.id})
+  let product = await products.deleteOne({ _id: req.params.id });
   res.send(product);
-})
+});
+
+app.put("/products/:id", async (req, res) => {
+  let product = await products.updateOne(
+    { _id: req.params.id },   
+    { $set: req.body }
+  );
+  res.send(product);
+});
 
 app.listen(PORT, () => console.log(`Listening on PORT ${PORT}`));
