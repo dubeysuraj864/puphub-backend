@@ -9,7 +9,7 @@ const admins = require("./db/admin");
 const dotenv = require("dotenv");
 const cors = require("cors");
 dotenv.config(); 
-
+const BASE_URL = process.env.BASE_URL
 const app = express();
 
 const PORT = process.env.PORT || 6000;  
