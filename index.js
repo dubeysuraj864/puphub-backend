@@ -1,18 +1,23 @@
 // import express and morgan
 const express = require("express");
 const morgan = require("morgan");
-require("./db/config");
 const users = require("./db/users");
 const products = require("./db/products");
 const admins = require("./db/admin");
-// Bring in environmental variables
 const dotenv = require("dotenv");
+dotenv.config();
+const mongoose = require("mongoose");
+mongoose.set("strictQuery", false);
+
+mongoose.connect(process.env.DATABASE);
+// Bring in environmental variables
+
 const cors = require("cors");
-dotenv.config(); 
-const BASE_URL = process.env.BASE_URL
+
+const BASE_URL = process.env.BASE_URI;
 const app = express();
 
-const PORT = process.env.PORT || 6000;  
+const PORT = process.env.PORT || 6000;
 
 // ALL YOUR MIDDLEWARE AND ROUTES GO HERE
 app.use(cors());
@@ -78,7 +83,7 @@ app.get("/products", async (req, res) => {
 });
 
 app.get("/products/:id", async (req, res) => {
-  const product = await products.findOne({_id: req.params.id});
+  const product = await products.findOne({ _id: req.params.id });
   if (product) {
     res.send(product);
   } else {
@@ -93,7 +98,7 @@ app.delete("/products/:id", async (req, res) => {
 
 app.put("/products/:id", async (req, res) => {
   let product = await products.updateOne(
-    { _id: req.params.id },   
+    { _id: req.params.id },
     { $set: req.body }
   );
   res.send(product);
