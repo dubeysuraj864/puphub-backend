@@ -4,19 +4,27 @@ const morgan = require("morgan");
 const users = require("./db/users");
 const products = require("./db/products");
 const admins = require("./db/admin");
-const dotenv = require("dotenv");
-dotenv.config();
+//db
 const mongoose = require("mongoose");
-mongoose.set("strictQuery", false);
 
 // Bring in environmental variables
-
+const dotenv = require("dotenv");
 const cors = require("cors");
-
-const BASE_URL = process.env.BASE_URI;
-const DATABASE = process.env.DATABASE;
-
-mongoose.connect(process.env.DATABASE);
+dotenv.config();
+const BASE_URL = process.env.BASE_URL;
+mongoose.set("strictQuery", false);
+const DB = process.env.DATABASE;
+mongoose
+  .connect(DB, {
+    useNewUrlParser: true,
+    // useCreateIndex: true,
+    useUnifiedTopology: true,
+    // useFindAndModify: false
+  })
+  .then(() => {
+    console.log("connected successfully");
+  })
+  .catch((error) => console.log(error));
 const app = express();
 
 const PORT = process.env.PORT || 6000;
